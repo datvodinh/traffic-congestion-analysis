@@ -17,3 +17,6 @@ dagster-webserver = "^1.8.11"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.dagster]
+module_name = "src"
