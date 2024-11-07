@@ -1,0 +1,183 @@
+---
+global:
+  postgresqlSecretName: "dagster-postgresql-secret"
+  dagsterHome: "/opt/dagster/dagster_home"
+  serviceAccountName: ""
+  celeryConfigSecretName: "dagster-celery-config-secret"
+
+nameOverride: ""
+fullnameOverride: ""
+imagePullSecrets: []
+
+dagsterWebserver:
+  replicaCount: 1
+  image:
+    repository: "docker.io/dagster/dagster-celery-k8s"
+    tag: ~
+    pullPolicy: Always
+
+  nameOverride: "dagster-webserver"
+  pathPrefix: ~
+  service:
+    type: ClusterIP
+    port: 80
+    annotations: {}
+
+  workspace:
+    enabled: false
+    servers:
+      - host: "k8s-example-user-code-1"
+        port: 3030
+        name: "user-code-example"
+
+  env: []
+  envConfigMaps: []
+  envSecrets: []
+
+  readinessProbe:
+    httpGet:
+      path: "/server_info"
+      port: 80
+    periodSeconds: 20
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+
+  livenessProbe: {}
+  startupProbe:
+    enabled: false
+
+computeLogManager:
+  type: NoOpComputeLogManager
+
+dagster-user-deployments:
+  enabled: true
+  enableSubchart: true
+  imagePullSecrets: []
+
+  deployments:
+    - name: "k8s-example-user-code-1"
+      image:
+        repository: "docker.io/dagster/user-code-example"
+        tag: ~
+        pullPolicy: Always
+
+      dagsterApiGrpcArgs:
+        - "--python-file"
+        - "/example_project/example_repo/repo.py"
+      port: 3030
+
+      includeConfigInLaunchedRuns:
+        enabled: true
+
+      env: []
+      envConfigMaps: []
+      envSecrets: []
+
+      readinessProbe:
+        enabled: true
+        periodSeconds: 20
+        timeoutSeconds: 10
+        successThreshold: 1
+        failureThreshold: 1
+
+      livenessProbe: {}
+      startupProbe:
+        enabled: false
+
+      service:
+        annotations: {}
+
+scheduler:
+  type: DagsterDaemonScheduler
+  config: {}
+
+runLauncher:
+  type: K8sRunLauncher
+  config:
+    k8sRunLauncher:
+      imagePullPolicy: "Always"
+      jobNamespace: ~
+      loadInclusterConfig: true
+      kubeconfigFile: ~
+      envConfigMaps: []
+      envSecrets: []
+      envVars: []
+      failPodOnRunFailure: false
+
+postgresql:
+  enabled: true
+  image:
+    repository: "library/postgres"
+    tag: "14.6"
+    pullPolicy: IfNotPresent
+  postgresqlHost: ""
+  postgresqlUsername: test
+  postgresqlPassword: test
+  postgresqlDatabase: test
+  postgresqlParams: {}
+  postgresqlScheme: ""
+  service:
+    port: 5432
+generatePostgresqlPasswordSecret: true
+generateCeleryConfigSecret: true
+
+dagsterDaemon:
+  enabled: true
+  image:
+    repository: "docker.io/dagster/dagster-celery-k8s"
+    tag: ~
+    pullPolicy: Always
+
+  heartbeatTolerance: 1800
+
+  runCoordinator:
+    enabled: true
+
+    type: QueuedRunCoordinator
+    config:
+      queuedRunCoordinator:
+        maxConcurrentRuns: ~
+        tagConcurrencyLimits: []
+        dequeueIntervalSeconds: ~
+        dequeueUseThreads: true
+        dequeueNumWorkers: 4
+
+  runMonitoring:
+    enabled: true
+    startTimeoutSeconds: 300
+    pollIntervalSeconds: 120
+    maxResumeRunAttempts: 0
+    freeSlotsAfterRunEndSeconds: 0
+
+  runRetries:
+    enabled: true
+    maxRetries: 0
+
+  sensors:
+    useThreads: true
+    numWorkers: 4
+
+  schedules:
+    useThreads: true
+    numWorkers: 4
+
+telemetry:
+  enabled: false
+
+retention:
+  enabled: false
+  schedule:
+    purgeAfterDays: -1
+  sensor:
+    purgeAfterDays:
+      failure: -1
+      skipped: 7
+      started: -1
+      success: -1
+  autoMaterialize:
+    purgeAfterDays:
+      failure: -1
+      skipped: 7
+      started: -1
+      success: -1

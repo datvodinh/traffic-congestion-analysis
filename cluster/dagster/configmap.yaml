@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  DAGSTER_COMPUTE_LOG_PREFIX: dagster-log-
+  DAGSTER_DEPLOYMENT: prod
+  
+kind: ConfigMap
+metadata:
+  name: dagster-configmap
+  namespace: blade

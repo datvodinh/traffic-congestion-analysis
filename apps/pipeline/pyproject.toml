@@ -12,6 +12,7 @@ packages = [
 python = ">=3.11,<3.12"
 dagster = "^1.8.11"
 dagster-webserver = "^1.8.11"
+dask = {extras = ["complete", "dataframe", "distributed"], version = "^2024.10.0"}
 
 
 [build-system]
