@@ -30,7 +30,7 @@ jobs:
             DEFAULT_BUMP: patch
             
   docker-build:
-    name: Uchat Image
+    name: Traffic Image
     environment: dev
     runs-on: ubuntu-latest
     permissions:
@@ -41,7 +41,7 @@ jobs:
       - name: Checkout Actions Repository
         uses: actions/checkout@v4
 
-      - name: Build Uchat
+      - name: Build Traffic
         uses: ./.github/actions/package-container
         with:
           FOLDER_PATH: ./apps/pipeline
