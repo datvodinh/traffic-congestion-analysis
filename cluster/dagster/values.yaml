@@ -1,22 +1,15 @@
----
 global:
   postgresqlSecretName: "dagster-postgresql-secret"
   dagsterHome: "/opt/dagster/dagster_home"
-  serviceAccountName: ""
-  celeryConfigSecretName: "dagster-celery-config-secret"
-
-nameOverride: ""
-fullnameOverride: ""
-imagePullSecrets: []
 
 dagsterWebserver:
   replicaCount: 1
   image:
-    repository: "docker.io/dagster/dagster-celery-k8s"
-    tag: ~
+    repository: "docker.io/dagster/dagster-k8s"
+    tag: 1.8.10
     pullPolicy: Always
 
-  nameOverride: "dagster-webserver"
+  nameOverride: "webserver"
   pathPrefix: ~
   service:
     type: ClusterIP
@@ -26,9 +19,9 @@ dagsterWebserver:
   workspace:
     enabled: false
     servers:
-      - host: "k8s-example-user-code-1"
-        port: 3030
-        name: "user-code-example"
+      - host: "dagster-pipeline"
+        port: 4266
+        name: "dagster-pipeline"
 
   env: []
   envConfigMaps: []
@@ -56,23 +49,22 @@ dagster-user-deployments:
   imagePullSecrets: []
 
   deployments:
-    - name: "k8s-example-user-code-1"
+    - name: "dagster-pipeline"
       image:
-        repository: "docker.io/dagster/user-code-example"
-        tag: ~
+        repository: "ghcr.io/datvodinh/traffic-analysis"
+        tag: latest
         pullPolicy: Always
 
       dagsterApiGrpcArgs:
-        - "--python-file"
-        - "/example_project/example_repo/repo.py"
-      port: 3030
+        - "-m"
+        - "src"
+      port: 4266 # Port for GRPC server
 
       includeConfigInLaunchedRuns:
         enabled: true
 
-      env: []
-      envConfigMaps: []
-      envSecrets: []
+      envConfigMaps:
+        - name: dagster-configmap
 
       readinessProbe:
         enabled: true
@@ -85,9 +77,6 @@ dagster-user-deployments:
       startupProbe:
         enabled: false
 
-      service:
-        annotations: {}
-
 scheduler:
   type: DagsterDaemonScheduler
   config: {}
@@ -99,34 +88,23 @@ runLauncher:
       imagePullPolicy: "Always"
       jobNamespace: ~
       loadInclusterConfig: true
-      kubeconfigFile: ~
-      envConfigMaps: []
-      envSecrets: []
-      envVars: []
-      failPodOnRunFailure: false
+      envConfigMaps:
+        - name: dagster-configmap
+      resources:
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 1
+          memory: 512Mi
 
-postgresql:
-  enabled: true
-  image:
-    repository: "library/postgres"
-    tag: "14.6"
-    pullPolicy: IfNotPresent
-  postgresqlHost: ""
-  postgresqlUsername: test
-  postgresqlPassword: test
-  postgresqlDatabase: test
-  postgresqlParams: {}
-  postgresqlScheme: ""
-  service:
-    port: 5432
-generatePostgresqlPasswordSecret: true
-generateCeleryConfigSecret: true
+      failPodOnRunFailure: false
 
 dagsterDaemon:
   enabled: true
   image:
-    repository: "docker.io/dagster/dagster-celery-k8s"
-    tag: ~
+    repository: "docker.io/dagster/dagster-k8s"
+    tag: 1.8.10
     pullPolicy: Always
 
   heartbeatTolerance: 1800
@@ -137,7 +115,7 @@ dagsterDaemon:
     type: QueuedRunCoordinator
     config:
       queuedRunCoordinator:
-        maxConcurrentRuns: ~
+        maxConcurrentRuns: 4
         tagConcurrencyLimits: []
         dequeueIntervalSeconds: ~
         dequeueUseThreads: true
@@ -156,11 +134,28 @@ dagsterDaemon:
 
   sensors:
     useThreads: true
-    numWorkers: 4
+    numWorkers: 16
+    numSubmitWorkers: 4
 
-  schedules:
-    useThreads: true
-    numWorkers: 4
+  envConfigMaps:
+    - name: dagster-configmap
+
+postgresql:
+  enabled: true
+  image:
+    repository: "library/postgres"
+    tag: "14.6"
+    pullPolicy: IfNotPresent
+  postgresqlHost: ""
+  postgresqlUsername: test
+  postgresqlPassword: test
+  postgresqlDatabase: test
+  postgresqlParams: {}
+  postgresqlScheme: ""
+  service:
+    port: 5432
+generatePostgresqlPasswordSecret: true
+generateCeleryConfigSecret: true
 
 telemetry:
   enabled: false

@@ -6,4 +6,4 @@ data:
 kind: ConfigMap
 metadata:
   name: dagster-configmap
-  namespace: blade
+  namespace: default
