@@ -40,7 +40,7 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Build Uchat
+      - name: Build Traffic
         uses: ./.github/actions/build-python
         with:
           context-directory: ./apps/pipeline
