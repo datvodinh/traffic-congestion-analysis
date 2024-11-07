@@ -13,7 +13,17 @@ python = ">=3.11,<3.12"
 dagster = "^1.8.11"
 dagster-webserver = "^1.8.11"
 dask = {extras = ["complete", "dataframe", "distributed"], version = "^2024.10.0"}
+dagster-k8s = "^0.25.0"
+dagster-powerbi = "^0.25.0"
+dagster-aws = "^0.25.0"
 
+
+[tool.poetry.group.dev.dependencies]
+deptry = "^0.20.0"
+ruff = "^0.7.2"
+
+[tool.deptry.per_rule_ignores]
+DEP002 = ["dask", "dagster", "dagster-webserver", "dagster-k8s", "dagster-powerbi", "dagster-aws"]
 
 [build-system]
 requires = ["poetry-core"]

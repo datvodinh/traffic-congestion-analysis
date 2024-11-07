@@ -1,8 +1,20 @@
+install: ## Install the poetry environment and install the pre-commit hooks
+	@echo "🚀 Install dependencies using Poetry"
+	@poetry install
+	
 check: ## Run code quality tools.
 	@echo "🚀 Checking Poetry lock file consistency with 'pyproject.toml': Running poetry lock --check"
 	@poetry check --lock
 	@echo "🚀 Checking for obsolete dependencies: Running deptry"
 	@poetry run deptry .
+
+lint: ## Run linters
+	@echo "🚀 Running Ruff lint"
+	@ruff check . --fix
+
+build: clean-build ## Build wheel file using poetry
+	@echo "🚀 Creating wheel file"
+	@poetry build
 
 export: ## Export requirements.txt file
 	@echo "🚀 Exporting requirements.txt file"
