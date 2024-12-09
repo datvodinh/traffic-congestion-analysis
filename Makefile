@@ -13,14 +13,16 @@ add-repo: ## Add Helm Repo for all Service
 	@helm repo update
 
 delete-repo: ## Remove Helm Repo
-	@echo "🚀 Remove Helm Repo for Prometheus"
+	@echo "🗑️ Remove Helm Repo for Prometheus"
 	@helm repo remove prometheus-community
-	@echo "🚀 Remove Helm Repo for Grafana"
+	@echo "🗑️ Remove Helm Repo for Grafana"
 	@helm repo remove grafana
-	@echo "🚀 Remove Helm Repo for Dagster"
+	@echo "🗑️ Remove Helm Repo for Dagster"
 	@helm repo remove dagster
-	@echo "🚀 Remove Helm Repo for Spark"
+	@echo "🗑️ Remove Helm Repo for Spark"
 	@helm repo remove spark
+	@echo "🗑️ Remove Helm Repo for ClickHouse"
+	@helm repo remove clickhouse
 
 add: ## Apply all Service to Kubernetes
 	@echo "🚀 Upgrade Helm Repo for Prometheus"
@@ -33,20 +35,28 @@ add: ## Apply all Service to Kubernetes
 	@kubectl apply -f cluster/apps/dagster/configmap.yaml
 	@echo "🚀 Upgrade Helm Repo for Spark"
 	@helm upgrade --install spark bitnami/spark -f cluster/apps/spark/values.yaml
+	@echo "🚀 Add ClickHouse"
+	@helm upgrade --install clickhouse bitnami/clickhouse -f cluster/apps/clickhouse/values.yaml
+	@echo "🚀 Add Kafka"
+	@helm upgrade --install kafka bitnami/kafka -f cluster/apps/kafka/values.yaml
 
-delete: ## Delete Helm Repo
-	@echo "🚀 Delete Helm Repo for Prometheus"
+delete: ## Delete all Service from Kubernetes
+	@echo "🗑️ Delete Helm Repo for Prometheus"
 	@helm delete prometheus
-	@echo "🚀 Delete Helm Repo for Grafana"
+	@echo "🗑️ Delete Helm Repo for Grafana"
 	@helm delete grafana
-	@echo "🚀 Delete Helm Repo for Dagster"
+	@echo "🗑️ Delete Helm Repo for Dagster"
 	@helm delete dagster
-	@echo "🚀 Delete Helm Repo for Spark"
+	@echo "🗑️ Delete Helm Repo for Spark"
 	@helm delete spark
+	@echo "🗑️ Delete Helm Repo for ClickHouse"
+	@helm delete clickhouse
+	@echo "🗑️ Delete Helm Repo for Kafka"
+	@helm delete kafka
 
 expose:
-	@echo "🚀 Expose Service"
-	@minikube service spark-master-svc dagster-webserver grafana prometheus-server
+	@echo "🌐 Expose Service"
+	@minikube service spark-master-svc dagster-webserver clickhouse grafana prometheus-server 
 	
 
 help:
