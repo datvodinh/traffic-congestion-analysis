@@ -22,7 +22,7 @@ deptry = "^0.20.0"
 ruff = "^0.7.2"
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["dagster", "dagster-webserver", "dagster-k8s", "dagster-aws"]
+DEP002 = ["dagster", "dagster-webserver", "dagster-k8s", "dagster-aws", "pyspark"]
 
 [build-system]
 requires = ["poetry-core"]
