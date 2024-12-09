@@ -4,7 +4,7 @@ install-helm: ## Install Helm
 	@chmod 700 get_helm.sh
 	@./get_helm.sh
 
-add: ## Add Helm Repo for Dask and Dagster
+add-repo: ## Add Helm Repo for all Service
 	@echo "🚀 Add Helm Repo"
 	@helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	@helm repo add grafana https://grafana.github.io/helm-charts
@@ -12,7 +12,17 @@ add: ## Add Helm Repo for Dask and Dagster
 	@helm repo add bitnami https://charts.bitnami.com/bitnami
 	@helm repo update
 
-upgrade: ## Upgrade Helm Repo with values.yaml file from Dagster and Dask
+delete-repo: ## Remove Helm Repo
+	@echo "🚀 Remove Helm Repo for Prometheus"
+	@helm repo remove prometheus-community
+	@echo "🚀 Remove Helm Repo for Grafana"
+	@helm repo remove grafana
+	@echo "🚀 Remove Helm Repo for Dagster"
+	@helm repo remove dagster
+	@echo "🚀 Remove Helm Repo for Spark"
+	@helm repo remove spark
+
+add: ## Apply all Service to Kubernetes
 	@echo "🚀 Upgrade Helm Repo for Prometheus"
 	@helm upgrade --install prometheus prometheus-community/prometheus -f cluster/monitoring/prometheus/values.yaml
 	@echo "🚀 Upgrade Helm Repo for Grafana"
@@ -23,7 +33,7 @@ upgrade: ## Upgrade Helm Repo with values.yaml file from Dagster and Dask
 	@kubectl apply -f cluster/apps/dagster/configmap.yaml
 	@echo "🚀 Upgrade Helm Repo for Spark"
 	@helm upgrade --install spark bitnami/spark -f cluster/apps/spark/values.yaml
-	
+
 delete: ## Delete Helm Repo
 	@echo "🚀 Delete Helm Repo for Prometheus"
 	@helm delete prometheus
@@ -34,17 +44,10 @@ delete: ## Delete Helm Repo
 	@echo "🚀 Delete Helm Repo for Spark"
 	@helm delete spark
 
-remove: ## Remove Helm Repo
-	@echo "🚀 Remove Helm Repo for Prometheus"
-	@helm repo remove prometheus-community
-	@echo "🚀 Remove Helm Repo for Grafana"
-	@helm repo remove grafana
-	@echo "🚀 Remove Helm Repo for Dagster"
-	@helm repo remove dagster
-	@echo "🚀 Remove Helm Repo for Dask"
-	@helm repo remove dask
-	@echo "🚀 Remove Helm Repo for Minio Operator"
-	@helm repo remove operator
+expose:
+	@echo "🚀 Expose Service"
+	@minikube service spark-master-svc dagster-webserver grafana prometheus-server
+	
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

@@ -1,5 +1,15 @@
 # Big Data Project about Traffic Congestion in Chicago
 
+## Help
+
+Run
+
+```bash
+make
+```
+
+to know all available commands.
+
 ## Install
 
 1. Helm Chart
@@ -8,4 +18,33 @@
 make install-helm
 ```
 
-Coming soon!
+2. Add all Helm Chart Repo
+
+```bash
+make add-repo
+```
+
+3. Add all Service to the Cluster
+
+```bash
+make add
+```
+
+4. Expose all Service
+
+```bash
+make expose
+```
+
+5. Cleanup all Service
+
+```bash
+make delete
+```
+
+6. Cleanup all Helm Chart Repo 
+```bash
+make delete-repo
+```
+
+

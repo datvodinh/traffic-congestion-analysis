@@ -57,8 +57,13 @@ master:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  resourcesPreset: "small"
-  resources: {}
+  resources:
+    limits:
+      cpu: 1
+      memory: 2G
+    requests:
+      cpu: 1
+      memory: 2G
   livenessProbe:
     enabled: true
     initialDelaySeconds: 180
@@ -97,6 +102,13 @@ worker:
     cluster: ""
   automountServiceAccountToken: false
   replicaCount: 3
+  resources:
+    limits:
+      cpu: 2
+      memory: 8G
+    requests:
+      cpu: 2
+      memory: 8G
   podSecurityContext:
     enabled: true
     fsGroupChangePolicy: Always
@@ -121,8 +133,6 @@ worker:
   updateStrategy:
     type: RollingUpdate
   podManagementPolicy: OrderedReady
-  resourcesPreset: "small"
-  resources: {}
   livenessProbe:
     enabled: true
     initialDelaySeconds: 180
@@ -181,7 +191,7 @@ service:
   sessionAffinity: None
 
 ingress:
-  enabled: false
+  enabled: true
   pathType: ImplementationSpecific
   apiVersion: ""
   hostname: spark.local
