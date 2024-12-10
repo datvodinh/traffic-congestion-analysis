@@ -21,6 +21,7 @@ python-dotenv = "^1.0.1"
 s3fs = "^2024.10.0"
 bokeh = "^3.6.2"
 matplotlib = "^3.9.3"
+pydantic = "^2.10.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -28,7 +29,7 @@ deptry = "^0.20.0"
 ruff = "^0.7.2"
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["dagster", "dagster-webserver", "dagster-k8s", "dagster-aws", "dask", "clickhouse-connect", "pandas", "s3fs", "matplotlib", "bokeh"]
+DEP002 = ["dagster-webserver", "dagster-k8s", "dagster-aws", "dask", "clickhouse-connect", "pandas", "s3fs", "matplotlib", "bokeh", "pydantic"]
 
 [build-system]
 requires = ["poetry-core"]
