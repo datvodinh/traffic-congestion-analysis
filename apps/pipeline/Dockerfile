@@ -9,8 +9,9 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
 # Project initialization
+RUN pip install uv
 COPY requirements.txt /opt/dagster/app/requirements.txt
-RUN pip install --no-cache-dir -r /opt/dagster/app/requirements.txt
+RUN uv pip install --no-cache-dir -r /opt/dagster/app/requirements.txt
 
 # Copy code and workspace to /opt/dagster/app
 COPY src /opt/dagster/app/src

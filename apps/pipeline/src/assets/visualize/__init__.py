@@ -1,7 +1,9 @@
 from dagster import asset
+from ...sensors import traffic_partitions_def
 
 
 @asset(
+    partitions_def=traffic_partitions_def,
     kinds={"PowerBI", "SQL"},
     description="Visualize 1",
 )
@@ -10,6 +12,7 @@ def visualize_table_1(analytic_1):
 
 
 @asset(
+    partitions_def=traffic_partitions_def,
     kinds={"PowerBI", "SQL"},
     description="Visualize 2",
 )
