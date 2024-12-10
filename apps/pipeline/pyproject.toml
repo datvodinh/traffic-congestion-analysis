@@ -17,6 +17,10 @@ dagster-aws = "^0.25.0"
 pandas = "^2.2.3"
 clickhouse-connect = "^0.8.9"
 dask = {extras = ["complete", "dataframe", "distributed"], version = "^2024.12.0"}
+python-dotenv = "^1.0.1"
+s3fs = "^2024.10.0"
+bokeh = "^3.6.2"
+matplotlib = "^3.9.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -24,7 +28,7 @@ deptry = "^0.20.0"
 ruff = "^0.7.2"
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["dagster", "dagster-webserver", "dagster-k8s", "dagster-aws", "dask", "clickhouse-connect", "pandas"]
+DEP002 = ["dagster", "dagster-webserver", "dagster-k8s", "dagster-aws", "dask", "clickhouse-connect", "pandas", "s3fs", "matplotlib", "bokeh"]
 
 [build-system]
 requires = ["poetry-core"]
