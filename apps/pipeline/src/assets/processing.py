@@ -46,7 +46,10 @@ def run_config(
             f"Reading at {config.keys}",
         )
         with dask.get_client():
-            df = dd.read_parquet(config.keys)
+            df = dd.read_parquet(
+                config.keys,
+                storage_options={"anon": True},
+            )
             df.columns = df.columns.str.lower()
             total_rows = df.shape[0].compute()
 
@@ -143,7 +146,11 @@ def get_heatmap_hour_and_week(
         with dask.get_client():
             df = df[df["speed"] >= 0]
 
-            agg = df.groupby(["hour", "day_of_week"])["bus_count"].sum().compute()
+            agg = (
+                df.groupby(["hour", "day_of_week"])["bus_count"]
+                .sum()
+                .compute()
+            )
 
             # create a pivot table
             pivot = agg.reset_index().pivot(

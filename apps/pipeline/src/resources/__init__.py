@@ -5,9 +5,19 @@ from dagster_aws.s3.io_manager import S3PickleIOManager
 from .dask import DaskResource
 
 
+aws_access_key_id = EnvVar("AWS_ACCESS_KEY_ID").get_value()
+aws_access_key_id = (
+    aws_access_key_id.strip() if type(aws_access_key_id) is str else None
+)
+aws_secret_access_key = EnvVar("AWS_SECRET_ACCESS_KEY").get_value()
+aws_secret_access_key = (
+    aws_secret_access_key.strip()
+    if type(aws_secret_access_key) is str
+    else None
+)
 S3_RESOURCE = S3Resource(
-    aws_access_key_id=EnvVar("AWS_ACCESS_KEY_ID"),
-    aws_secret_access_key=EnvVar("AWS_SECRET_ACCESS_KEY"),
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
 )
 
 DASK_RESOURCE = DaskResource(
