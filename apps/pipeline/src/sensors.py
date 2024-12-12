@@ -30,9 +30,11 @@ def get_run_requests(
                 partition_key=keys,
                 run_config={
                     "ops": {
-                        "run_processing": {
+                        "run_config": {
                             "config": {
-                                "keys": keys,
+                                "keys": os.path.join(
+                                    "s3://", os.getenv("S3_BUCKET"), keys
+                                ),
                             }
                         },
                     }
@@ -106,6 +108,11 @@ def check_traffic_data_sensor(
     s3: S3Resource,
 ) -> SensorResult:
     """A sensor to monitor the specified S3 bucket for new files."""
+    if context.cursor:
+        return SkipReason(
+            f"No new s3 files found in the {os.getenv('S3_BUCKET')}\
+                {os.getenv('TRAFFIC_DATA_PREFIX')} bucket."
+        )
     # Check for new files in the S3 bucket
     new_s3_keys = get_s3_keys(
         bucket=os.getenv("S3_BUCKET"),

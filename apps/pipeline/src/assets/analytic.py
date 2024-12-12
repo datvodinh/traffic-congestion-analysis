@@ -1,5 +1,5 @@
 from dagster import asset
-from ...sensors import traffic_partitions_def
+from ..sensors import traffic_partitions_def
 
 
 @asset(

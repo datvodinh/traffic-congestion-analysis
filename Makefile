@@ -59,7 +59,7 @@ delete: ## Delete all Service from Kubernetes
 
 expose:
 	@echo "🌐 Expose Service"
-	@minikube service dagster-webserver clickhouse grafana prometheus-server 
+	@minikube service dagster-webserver dask-scheduler clickhouse grafana prometheus-server 
 	
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

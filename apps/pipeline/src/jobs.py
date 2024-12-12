@@ -18,7 +18,7 @@ executor_def: ExecutorDefinition = (
 traffic_analysis_job = define_asset_job(
     description="Process and analyze traffic data from Chicago city.",
     name="traffic_analysis_job",
-    selection="run_processing*",
+    selection="run_config*",
     partitions_def=traffic_partitions_def,
     tags={"asset": "traffic"},
 )

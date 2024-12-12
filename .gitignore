@@ -163,3 +163,5 @@ cython_debug/
 tmp*
 *.ipynb
 *.csv
+download.py
+*.geojson
