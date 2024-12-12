@@ -39,23 +39,29 @@ def convert_plot_to_metadata(
 def run_config(
     context: AssetExecutionContext,
     config: TrafficInputConfig,
+    dask: DaskResource,
 ):
-    context.log.info(
-        f"Reading at {config.keys}",
-    )
+    client = dask.get_client()
+    try:
+        context.log.info(
+            f"Reading at {config.keys}",
+        )
 
-    df = dd.read_parquet(config.keys)
-    df.columns = df.columns.str.lower()
-    total_rows = df.shape[0].compute()
+        df = dd.read_parquet(config.keys)
+        df.columns = df.columns.str.lower()
+        total_rows = df.shape[0].compute()
 
-    context.add_output_metadata(
-        {
-            "Dataframe": MetadataValue.md(df.head().to_markdown()),
-            "Total Rows": f"{total_rows} rows",
-        },
-    )
-
-    return df
+        context.add_output_metadata(
+            {
+                "Dataframe": MetadataValue.md(df.head().to_markdown()),
+                "Total Rows": f"{total_rows} rows",
+            },
+        )
+        return df
+    except Exception as e:
+        raise e
+    finally:
+        client.close()
 
 
 @asset(
