@@ -5,11 +5,8 @@ scheduler:
     repository: "ghcr.io/datvodinh/traffic-analysis"
     tag: latest
     pullPolicy: Always
-    dask_worker: "dask-worker"
-
   replicas: 1
-  serviceType: "ClusterIP"
-  servicePort: 8786
+
 
 worker:
   name: worker
@@ -17,15 +14,17 @@ worker:
     repository: "ghcr.io/datvodinh/traffic-analysis"
     tag: latest
     pullPolicy: Always
-    dask_worker: "dask-worker"
 
   replicas: 4
   strategy:
     type: RollingUpdate
-  default_resources:
-    cpu: 3
-    memory: "9GiB"
-  portDashboard: 8790
+  resources:
+    limits:
+      cpu: 3
+      memory: 9G
+    requests:
+      cpu: 3
+      memory: 9G
 
 jupyter:
   name: jupyter
