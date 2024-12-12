@@ -5,6 +5,11 @@ data:
   MINIO_URL: http://minio.default.svc.cluster.local:9000
   DASK_URL: tcp://dask-scheduler.default.svc.cluster.local:8786
   CLICKHOUSE_URL: http://clickhouse.default.svc.cluster.local:9000
+  S3_BUCKET: traffic # This is the bucket name in Minio, no need secret.
+  AWS_ACCESS_KEY_ID: pENXPyE2HgWhtrt05BS1
+  AWS_SECRET_ACCESS_KEY: BtjRo077f6fetEzXZyAlTnlRQK8sZbprZDMCJkHO
+  AWS_ENDPOINT_URL: http://minio.default.svc.cluster.local:9000
+  TRAFFIC_DATA_PREFIX: ""
 
 kind: ConfigMap
 metadata:

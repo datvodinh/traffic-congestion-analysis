@@ -4,7 +4,7 @@ scheduler:
   image:
     repository: "ghcr.io/datvodinh/traffic-analysis"
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     dask_worker: "dask-worker"
 
   replicas: 1
@@ -19,12 +19,12 @@ worker:
     pullPolicy: IfNotPresent
     dask_worker: "dask-worker"
 
-  replicas: 3
+  replicas: 4
   strategy:
     type: RollingUpdate
   default_resources:
-    cpu: 1
-    memory: "4GiB"
+    cpu: 3
+    memory: "9GiB"
   portDashboard: 8790
 
 jupyter:

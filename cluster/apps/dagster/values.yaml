@@ -6,7 +6,7 @@ dagsterWebserver:
   replicaCount: 1
   image:
     repository: "docker.io/dagster/dagster-k8s"
-    tag: 1.8.10
+    tag: 1.9.4
     pullPolicy: Always
 
   nameOverride: "webserver"
@@ -104,7 +104,7 @@ dagsterDaemon:
   enabled: true
   image:
     repository: "docker.io/dagster/dagster-k8s"
-    tag: 1.8.10
+    tag: 1.9.4
     pullPolicy: Always
 
   heartbeatTolerance: 1800

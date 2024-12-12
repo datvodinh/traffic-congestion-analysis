@@ -26,6 +26,7 @@ seaborn = "^0.13.2"
 geopandas = "^1.0.1"
 dask-geopandas = "^0.4.2"
 geojson = "^3.1.0"
+dagster-postgres = "^0.25.4"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -33,7 +34,7 @@ deptry = "^0.20.0"
 ruff = "^0.7.2"
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["dagster-webserver", "dagster-k8s", "dagster-aws", "dask", "clickhouse-connect", "pandas", "s3fs", "matplotlib", "bokeh", "pydantic", "geopandas","dask-geopandas", "geojson"]
+DEP002 = ["dagster-webserver", "dagster-k8s", "dagster-aws", "dask", "clickhouse-connect", "pandas", "s3fs", "matplotlib", "bokeh", "pydantic", "geopandas","dask-geopandas", "geojson", "dagster-postgres"]
 
 [build-system]
 requires = ["poetry-core"]

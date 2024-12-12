@@ -27,13 +27,13 @@ make add-repo
 3. Add all Service to the Cluster
 
 ```bash
-make add
+make up
 ```
 
 4. Expose all Service
 
 ```bash
-make expose
+make down
 ```
 
 5. Cleanup all Service

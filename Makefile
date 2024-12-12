@@ -25,7 +25,7 @@ delete-repo: ## Remove Helm Repo
 	@echo "🗑️ Remove Helm Repo for ClickHouse"
 	@helm repo remove clickhouse
 
-add: ## Apply all Service to Kubernetes
+up: ## Apply all Service to Kubernetes
 	@echo "🚀 Upgrade Helm Repo for Prometheus"
 	@helm upgrade --install prometheus prometheus-community/prometheus -f cluster/monitoring/prometheus/values.yaml
 	@echo "🚀 Upgrade Helm Repo for Grafana"
@@ -43,7 +43,7 @@ add: ## Apply all Service to Kubernetes
 	@echo "🚀 Add Kafka"
 	@helm upgrade --install kafka bitnami/kafka -f cluster/apps/kafka/values.yaml
 
-delete: ## Delete all Service from Kubernetes
+down: ## Delete all Service from Kubernetes
 	@echo "🗑️ Delete Helm Repo for Prometheus"
 	@helm delete prometheus
 	@echo "🗑️ Delete Helm Repo for Grafana"
