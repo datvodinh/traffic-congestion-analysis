@@ -1,3 +1,4 @@
+import os
 import base64
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -45,10 +46,14 @@ def run_config(
         context.log.info(
             f"Reading at {config.keys}",
         )
+        endpoint_url = os.getenv("AWS_ENDPOINT_URL")
         with dask.get_client():
             df = dd.read_parquet(
                 config.keys,
-                storage_options={"anon": True},
+                storage_options={
+                    "anon": True,
+                    "endpoint_url": endpoint_url,
+                },
             )
             df.columns = df.columns.str.lower()
             total_rows = df.shape[0].compute()
