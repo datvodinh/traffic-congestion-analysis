@@ -71,50 +71,56 @@ def get_heatmap_hour_and_month(
     dask: DaskResource,
     df: dd.DataFrame,
 ):
-    df = df[df["speed"] >= 0]
+    client = dask.get_client()
+    try:
+        df = df[df["speed"] >= 0]
 
-    agg = df.groupby(["hour", "month"])["bus_count"].sum().compute()
+        agg = df.groupby(["hour", "month"])["bus_count"].sum().compute()
 
-    # step 3: create a pivot table
-    pivot = agg.reset_index().pivot(
-        index="hour", columns="month", values="bus_count"
-    )
+        # step 3: create a pivot table
+        pivot = agg.reset_index().pivot(
+            index="hour", columns="month", values="bus_count"
+        )
 
-    # fill nan values for visualization
-    pivot = pivot.fillna(0)
+        # fill nan values for visualization
+        pivot = pivot.fillna(0)
 
-    # step 4: plot heatmap
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(
-        pivot,
-        annot=False,
-        fmt=".0f",
-        cmap="coolwarm",
-        cbar=True,
-        xticklabels=[
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-        ],
-    )
-    plt.title("Heatmap of Bus Count by Hour and Month")
-    plt.xlabel("Month")
-    plt.ylabel("Hour")
-    heatmap_hour_month = convert_plot_to_metadata(plt)
-    context.add_output_metadata(
-        {
-            "Heatmap": heatmap_hour_month,
-        }
-    )
+        # step 4: plot heatmap
+        plt.figure(figsize=(12, 8))
+        sns.heatmap(
+            pivot,
+            annot=False,
+            fmt=".0f",
+            cmap="coolwarm",
+            cbar=True,
+            xticklabels=[
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+            ],
+        )
+        plt.title("Heatmap of Bus Count by Hour and Month")
+        plt.xlabel("Month")
+        plt.ylabel("Hour")
+        heatmap_hour_month = convert_plot_to_metadata(plt)
+        context.add_output_metadata(
+            {
+                "Heatmap": heatmap_hour_month,
+            }
+        )
+    except Exception as e:
+        raise e
+    finally:
+        client.close()
 
 
 @asset(
@@ -130,44 +136,50 @@ def get_heatmap_hour_and_week(
     dask: DaskResource,
     df: dd.DataFrame,
 ):
-    df = df[df["speed"] >= 0]
+    client = dask.get_client()
+    try:
+        df = df[df["speed"] >= 0]
 
-    agg = df.groupby(["hour", "day_of_week"])["bus_count"].sum().compute()
+        agg = df.groupby(["hour", "day_of_week"])["bus_count"].sum().compute()
 
-    # create a pivot table
-    pivot = agg.reset_index().pivot(
-        index="hour", columns="day_of_week", values="bus_count"
-    )
+        # create a pivot table
+        pivot = agg.reset_index().pivot(
+            index="hour", columns="day_of_week", values="bus_count"
+        )
 
-    # fill nan values for visualization
-    pivot = pivot.fillna(0)
+        # fill nan values for visualization
+        pivot = pivot.fillna(0)
 
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(
-        pivot,
-        annot=False,
-        fmt=".0f",
-        cmap="coolwarm",
-        cbar=True,
-        xticklabels=[
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-        ],
-    )
-    plt.title("Heatmap of Bus Count by Hour and Day Of Week")
-    plt.xlabel("Day of Week")
-    plt.ylabel("Hour")
-    heatmap_hour_week = convert_plot_to_metadata(plt)
-    context.add_output_metadata(
-        {
-            "Heatmap": heatmap_hour_week,
-        }
-    )
+        plt.figure(figsize=(12, 8))
+        sns.heatmap(
+            pivot,
+            annot=False,
+            fmt=".0f",
+            cmap="coolwarm",
+            cbar=True,
+            xticklabels=[
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+            ],
+        )
+        plt.title("Heatmap of Bus Count by Hour and Day Of Week")
+        plt.xlabel("Day of Week")
+        plt.ylabel("Hour")
+        heatmap_hour_week = convert_plot_to_metadata(plt)
+        context.add_output_metadata(
+            {
+                "Heatmap": heatmap_hour_week,
+            }
+        )
+    except Exception as e:
+        raise e
+    finally:
+        client.close()
 
 
 @asset(

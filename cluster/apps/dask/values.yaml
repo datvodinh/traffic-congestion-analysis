@@ -16,7 +16,7 @@ worker:
   image:
     repository: "ghcr.io/datvodinh/traffic-analysis"
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     dask_worker: "dask-worker"
 
   replicas: 4
