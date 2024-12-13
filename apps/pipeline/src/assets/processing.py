@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import dask.dataframe as dd
 import geopandas as gpd
 from shapely.geometry import LineString
-from geojson import Feature
 from dagster import asset
 from io import BytesIO
 from dagster import (
@@ -288,31 +287,38 @@ def get_congestion_data(
             result = result.compute()
 
             # Convert to GeoPandas dataframe
-            gresult = gpd.GeoDataFrame(
+            gdf = gpd.GeoDataFrame(
                 result,
                 geometry="geometry",
                 crs="EPSG:4326",
             )
 
-            # Create GeoJSON features
-            features = [
-                Feature(
-                    geometry=line.geometry,
-                    properties={
-                        "segment_id": line.segment_id,
-                        "speed": line.speed,
-                        "speed_color": line.speed_color,
-                        "from_street": line.from_street,
-                        "to_street": line.to_street,
-                        "street": line.street,
-                        "length": line.length,
-                        "hour": line.hour,
-                    },
-                )
-                for _, line in gresult.iterrows()
-            ]
+            gdf["speed"].plot.hist(alpha=0.4, bins=100)
+            plt.xlabel("Speed (MPH)")
+            plt.grid()
+            plt.title("Speed Histogram in Chicago")
 
-            gdf = gpd.GeoDataFrame.from_features(features)
+            speed_histogram = convert_plot_to_metadata(plt)
+
+            gdf.plot(
+                column="speed",
+                figsize=(10, 10),
+                legend=True,
+            )
+            plt.grid()
+            plt.title("Traffic Segments in Chicago")
+            plt.xlabel("Longitude")
+            plt.ylabel("Latitude")
+
+            chicago_segments = convert_plot_to_metadata(plt)
+
+            context.add_output_metadata(
+                {
+                    "Dataframe": MetadataValue.md(gdf.head().to_markdown()),
+                    "Speed Histogram": speed_histogram,
+                    "Chicaco Segments": chicago_segments,
+                },
+            )
 
             return gdf
 

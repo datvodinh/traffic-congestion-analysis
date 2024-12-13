@@ -25,7 +25,8 @@ def convert_plot_to_metadata(
 @asset(
     ins={"gdf": AssetIn("get_congestion_data")},
     partitions_def=traffic_partitions_def,
-    kinds={"Tableau"},
+    kinds={"ClickHouse"},
+    description="Save Congestion Data to ClickHouse",
 )
 def visualize_congestion_tableau(
     context: AssetExecutionContext,
