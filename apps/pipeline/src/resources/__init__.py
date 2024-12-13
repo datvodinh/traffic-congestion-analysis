@@ -1,9 +1,8 @@
-import os
 from dagster import EnvVar
 from dagster_aws.s3 import S3Resource
 from dagster_aws.s3.io_manager import S3PickleIOManager
 from .dask import DaskResource
-
+from .clickhouse import ClickHouseResource
 
 aws_access_key_id = EnvVar("AWS_ACCESS_KEY_ID").get_value()
 aws_access_key_id = (
@@ -20,13 +19,22 @@ S3_RESOURCE = S3Resource(
     aws_secret_access_key=aws_secret_access_key,
 )
 
-DASK_RESOURCE = DaskResource(
-    address=os.getenv("DASK_URL", None),
+DASK_RESOURCE = {
+    "prod": DaskResource(
+        address=EnvVar("DASK_URL"),
+    ),
+    "dev": DaskResource(),
+}
+CLICKHOUSE_RESOURCE = ClickHouseResource(
+    address=EnvVar("CLICKHOUSE_URL"),
+    username=EnvVar("CLICKHOUSE_USER"),
+    password=EnvVar("CLICKHOUSE_PASSWORD"),
 )
 
 RESOURCES_PROD = {
     "s3": S3_RESOURCE,
-    "dask": DASK_RESOURCE,
+    "dask": DASK_RESOURCE["prod"],
+    "clickhouse": CLICKHOUSE_RESOURCE,
     "io_manager": S3PickleIOManager(
         s3_resource=S3_RESOURCE,
         s3_bucket=EnvVar("S3_BUCKET"),
@@ -36,7 +44,8 @@ RESOURCES_PROD = {
 
 RESOURCES_DEV = {
     "s3": S3_RESOURCE,
-    "dask": DASK_RESOURCE,
+    "dask": DASK_RESOURCE["dev"],
+    "clickhouse": CLICKHOUSE_RESOURCE,
 }
 
 resources_by_deployment_name = {

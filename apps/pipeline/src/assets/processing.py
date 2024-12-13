@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import dask.dataframe as dd
 import geopandas as gpd
 from shapely.geometry import LineString
-from geojson import Feature, FeatureCollection
+from geojson import Feature
 from dagster import asset
 from io import BytesIO
 from dagster import (
@@ -38,7 +38,7 @@ def convert_plot_to_metadata(
 
 @asset(
     partitions_def=traffic_partitions_def,
-    kinds={"Python"},
+    kinds={"S3"},
     description="Contain Data ID",
 )
 def run_config(
@@ -312,12 +312,9 @@ def get_congestion_data(
                 for _, line in gresult.iterrows()
             ]
 
-            collection = FeatureCollection(features)
+            gdf = gpd.GeoDataFrame.from_features(features)
 
-            collection
-            print(
-                "GeoJSON file with median speed and colors has been created successfully."
-            )
+            return gdf
 
     except Exception as e:
         raise e
