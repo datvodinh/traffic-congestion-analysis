@@ -29,6 +29,8 @@ geojson = "^3.1.0"
 dagster-postgres = "^0.25.4"
 numpy = "^2.2.0"
 shapely = "^2.0.6"
+dagster-prometheus = "^0.25.5"
+prometheus-client = "^0.21.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -36,7 +38,7 @@ deptry = "^0.20.0"
 ruff = "^0.7.2"
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["dagster-webserver", "pandas", "s3fs", "bokeh", "pydantic", "dask-geopandas", "dagster-postgres", "geojson"]
+DEP002 = ["dagster-webserver", "pandas", "s3fs", "bokeh", "pydantic", "dask-geopandas", "dagster-postgres", "geojson", "dagster-prometheus", "prometheus-client"]
 
 [build-system]
 requires = ["poetry-core"]

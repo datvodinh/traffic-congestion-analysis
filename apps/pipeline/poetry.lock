@@ -1360,6 +1360,21 @@ dagster = "1.9.5"
 psycopg2-binary = "*"
 
 [[package]]
+name = "dagster-prometheus"
+version = "0.25.5"
+description = "A Dagster integration for prometheus"
+optional = false
+python-versions = "<3.13,>=3.9"
+files = [
+    {file = "dagster-prometheus-0.25.5.tar.gz", hash = "sha256:68f685730372c7ef519d123ea9ea3c576ae99dd645b98a1eb094d180c6b11bbe"},
+    {file = "dagster_prometheus-0.25.5-py3-none-any.whl", hash = "sha256:393b656e80ebdde047c89cc68001ace724b2eae44eeeca0a4f30fd1d4bbeda0f"},
+]
+
+[package.dependencies]
+dagster = "1.9.5"
+prometheus-client = "*"
+
+[[package]]
 name = "dagster-webserver"
 version = "1.9.5"
 description = "Web UI for dagster."
@@ -3119,6 +3134,20 @@ mic = ["olefile"]
 tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
 typing = ["typing-extensions"]
 xmp = ["defusedxml"]
+
+[[package]]
+name = "prometheus-client"
+version = "0.21.1"
+description = "Python client for the Prometheus monitoring system."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "prometheus_client-0.21.1-py3-none-any.whl", hash = "sha256:594b45c410d6f4f8888940fe80b5cc2521b305a1fafe1c58609ef715a001f301"},
+    {file = "prometheus_client-0.21.1.tar.gz", hash = "sha256:252505a722ac04b0456be05c05f75f45d760c2911ffc45f2a06bcaed9f3ae3fb"},
+]
+
+[package.extras]
+twisted = ["twisted"]
 
 [[package]]
 name = "propcache"
@@ -5056,4 +5085,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.12"
-content-hash = "007f6066bd140a1aa7c4380894f4413de594f4c50aa77f8d39e6553ce5daa235"
+content-hash = "8673d96cef750ebd0ca4938db8ccff25a6d7cb02bc2017bb85e18d7f2e322bd8"

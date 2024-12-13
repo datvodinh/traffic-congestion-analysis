@@ -22,30 +22,30 @@ delete-repo: ## Remove Helm Repo
 	@helm repo remove dagster
 	@echo "🗑️ Remove Helm Repo for dask"
 	@helm repo remove dask
-	@echo "🗑️ Remove Helm Repo for ClickHouse"
-	@helm repo remove clickhouse
+	# @echo "🗑️ Remove Helm Repo for ClickHouse"
+	# @helm repo remove clickhouse
 
 up: ## Apply all Service to Kubernetes
-	# @echo "🚀 Upgrade Helm Repo for Prometheus"
-	# @helm upgrade --install prometheus prometheus-community/prometheus -f cluster/monitoring/prometheus/values.yaml
-	# @echo "🚀 Upgrade Helm Repo for Grafana"
-	# @helm upgrade --install grafana grafana/grafana -f cluster/monitoring/grafana/values.yaml
+	@echo "🚀 Upgrade Helm Repo for Prometheus"
+	@helm upgrade --install prometheus prometheus-community/prometheus -f cluster/monitoring/prometheus/values.yaml
+	@echo "🚀 Upgrade Helm Repo for Grafana"
+	@helm upgrade --install grafana grafana/grafana -f cluster/monitoring/grafana/values.yaml
 	@echo "🚀 Upgrade Helm Repo for Dagster"
 	@helm upgrade --install dagster dagster/dagster -f cluster/apps/dagster/values.yaml
 	@echo "🚀 Add Dagster Configmap"
 	@kubectl apply -f cluster/apps/dagster/configmap.yaml
 	@echo "🚀 Upgrade Helm Repo for Dask"
 	@helm upgrade --install dask dask/dask -f cluster/apps/dask/values.yaml
-	@echo "🚀 Add ClickHouse"
-	@helm upgrade --install clickhouse bitnami/clickhouse -f cluster/apps/clickhouse/values.yaml
+	# @echo "🚀 Add ClickHouse"
+	# @helm upgrade --install clickhouse bitnami/clickhouse -f cluster/apps/clickhouse/values.yaml
 	# @echo "🚀 Add Kafka"
 	# @helm upgrade --install kafka bitnami/kafka -f cluster/apps/kafka/values.yaml
 
 down: ## Delete all Service from Kubernetes
-	# @echo "🗑️ Delete Helm Repo for Prometheus"
-	# @helm delete prometheus
-	# @echo "🗑️ Delete Helm Repo for Grafana"
-	# @helm delete grafana
+	@echo "🗑️ Delete Helm Repo for Prometheus"
+	@helm delete prometheus
+	@echo "🗑️ Delete Helm Repo for Grafana"
+	@helm delete grafana
 	@echo "🗑️ Delete Helm Repo for Dagster"
 	@helm delete dagster
 	@echo "🗑️ Delete Helm Repo for Dask"
