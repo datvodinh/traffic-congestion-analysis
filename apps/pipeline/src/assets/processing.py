@@ -220,10 +220,10 @@ def speed_category(speed):
     """Categorize speed into color"""
     conditions = [
         (speed > 18),
-        (speed >= 15) & (speed <= 18),
+        (speed >= 12) & (speed <= 18),
     ]
-    choices = ["Green", "Orange"]
-    return np.select(conditions, choices, default="Red")
+    choices = ["Light", "Medium"]
+    return np.select(conditions, choices, default="Heavy")
 
 
 def create_geometry(df):
@@ -276,7 +276,7 @@ def get_congestion_data(
                 .persist()
             )
             # Map speed to color
-            result["speed_color"] = result["speed"].map_partitions(
+            result["congestion_level"] = result["speed"].map_partitions(
                 speed_category, meta=("speed", "object")
             )
             # Apply geometry creation

@@ -32,13 +32,13 @@ def serving_congestion_data(
     CREATE TABLE IF NOT EXISTS traffic_data (
     segment_id UInt32,         -- Assuming segment IDs are integers
     speed Float32,             -- Speed is a floating-point number
-    speed_color String,        -- Speed color is a string (e.g., "Green")
+    congestion_level String,   -- Congestion level is a string (e.g., "Green")
     from_street String,        -- From-street name as a string
     to_street String,          -- To-street name as a string
     street String,             -- Street name as a string
     length Float32,            -- Length as a floating-point number
     hour UInt8,                -- Hour as an 8-bit unsigned integer (0-23)
-    geometry LineString,            -- Geometry as WKT (Well-Known Text) stored as a string
+    geometry LineString,       -- Geometry as WKT (Well-Known Text) stored as a string
     start_latitude Float32,    -- Start latitude as a floating-point number
     start_longitude Float32,   -- Start longitude as a floating-point number
     end_latitude Float32,      -- End latitude as a floating-point number
