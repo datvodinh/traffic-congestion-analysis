@@ -1,5 +1,7 @@
 # Big Data Project about Traffic Congestion in Chicago
 
+![alt text](style/image.png)
+
 ## Help
 
 Run
