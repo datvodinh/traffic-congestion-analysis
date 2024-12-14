@@ -26,6 +26,7 @@ def serving_congestion_data(
     )
 
     client = clickhouse.get_client()
+    client.command("DROP TABLE IF EXISTS traffic_data")
     client.command(
         """
     CREATE TABLE IF NOT EXISTS traffic_data (
@@ -71,6 +72,7 @@ def serving_agg_hour_and_week(
     agg: pd.DataFrame,
 ):
     client = clickhouse.get_client()
+    client.command("DROP TABLE IF EXISTS traffic_data_hour_week")
     client.command(
         """
     CREATE TABLE IF NOT EXISTS traffic_data_hour_week (
@@ -110,6 +112,7 @@ def serving_agg_hour_and_month(
     agg: pd.DataFrame,
 ):
     client = clickhouse.get_client()
+    client.command("DROP TABLE IF EXISTS traffic_data_hour_month")
     client.command(
         """
     CREATE TABLE IF NOT EXISTS traffic_data_hour_month (
