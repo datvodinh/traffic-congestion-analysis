@@ -281,11 +281,9 @@ def get_congestion_data(
             )
             # Apply geometry creation
             geometry_meta = {
-                col: "float64"
-                for col in result.columns
-                if col != "geometry"
+                col: "float64" for col in result.columns if col != "geometry"
             }
-            geometry_meta["geometry"] = "str"
+            geometry_meta["geometry"] = "object"
             result = result.map_partitions(
                 create_geometry,
                 meta=geometry_meta,
