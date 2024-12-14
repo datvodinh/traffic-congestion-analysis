@@ -35,13 +35,13 @@ make up
 4. Expose all Service
 
 ```bash
-make down
+make expose
 ```
 
 5. Cleanup all Service
 
 ```bash
-make delete
+make down
 ```
 
 6. Cleanup all Helm Chart Repo 
