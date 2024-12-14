@@ -33,11 +33,11 @@ def visualize_congestion_tableau(
     clickhouse: ClickHouseResource,
     gdf: GeoDataFrame,
 ):
-    client = clickhouse.get_client()
+    # client = clickhouse.get_client()
     context.add_output_metadata(
         {
             "Dataframe": MetadataValue.md(gdf.head().to_markdown()),
             "Total Segment": f"{len(gdf.groupby('segment_id'))} segments",
-            "ClickHouse Version": client.server_version,
+            # "ClickHouse Version": client.server_version,
         },
     )
