@@ -12,24 +12,25 @@ concurrency:
 
 jobs:
   tag:
-      name: Update Tag
-      runs-on: ubuntu-latest
-      permissions:
-        contents: write
-        packages: write
-      steps:
-        - name: Check out
-          uses: actions/checkout@v4
+    name: Update Tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
 
-        - name: Create a new tag
-          id: tag
-          uses: anothrNick/github-tag-action@1.71.0
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            WITH_V: "true"
-            DEFAULT_BUMP: patch
-            
+      - name: Create a new tag
+        id: tag
+        uses: anothrNick/github-tag-action@1.71.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: "true"
+          DEFAULT_BUMP: patch
+
   docker-build:
+    needs: tag
     name: Traffic Image
     environment: dev
     runs-on: ubuntu-latest
