@@ -16,7 +16,7 @@ image:
   pullSecrets: []
   debug: false
 
-shards: 2
+shards: 1
 replicaCount: 2
 distributeReplicasByZone: false
 
@@ -33,9 +33,13 @@ containerPorts:
   interserver: 9009
   metrics: 8001
 
-resourcesPreset: "small"
-
-resources: {}
+resources:
+  limits:
+    cpu: 0.5
+    memory: 8G
+  requests:
+    cpu: 0.5
+    memory: 8G
 
 podSecurityContext:
   enabled: true

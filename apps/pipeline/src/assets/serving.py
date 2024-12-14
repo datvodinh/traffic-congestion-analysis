@@ -38,7 +38,11 @@ def serving_congestion_data(
     street String,             -- Street name as a string
     length Float32,            -- Length as a floating-point number
     hour UInt8,                -- Hour as an 8-bit unsigned integer (0-23)
-    geometry LineString            -- Geometry as WKT (Well-Known Text) stored as a string
+    geometry LineString,            -- Geometry as WKT (Well-Known Text) stored as a string
+    start_latitude Float32,    -- Start latitude as a floating-point number
+    start_longitude Float32,   -- Start longitude as a floating-point number
+    end_latitude Float32,      -- End latitude as a floating-point number
+    end_longitude Float32      -- End longitude as a floating-point number
     ) 
     ENGINE = MergeTree()
     ORDER BY segment_id;""",

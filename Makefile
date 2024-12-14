@@ -62,7 +62,7 @@ down: ## Delete all Service from Kubernetes
 
 expose:
 	@echo "🌐 Expose Service"
-	@minikube service dagster-webserver dask-scheduler grafana
+	@minikube service dagster-webserver dask-scheduler grafana superset
 
 cleanup:
 	@kubectl delete pods --field-selector=status.phase=Succeeded

@@ -237,14 +237,6 @@ def create_geometry(df):
         )
         for _, row in df.iterrows()
     ]
-    df = df.drop(
-        columns=[
-            "start_longitude",
-            "start_latitude",
-            "end_longitude",
-            "end_latitude",
-        ]
-    )
     return df
 
 
@@ -287,17 +279,11 @@ def get_congestion_data(
             result["speed_color"] = result["speed"].map_partitions(
                 speed_category, meta=("speed", "object")
             )
-            drop_columns = [
-                "start_latitude",
-                "start_longitude",
-                "end_latitude",
-                "end_longitude",
-            ]
             # Apply geometry creation
             geometry_meta = {
                 col: "float64"
                 for col in result.columns
-                if col != "geometry" and col not in drop_columns
+                if col != "geometry"
             }
             geometry_meta["geometry"] = "str"
             result = result.map_partitions(
