@@ -111,7 +111,7 @@ def drop_invalid_rows(
     kinds={"Dask"},
     description="Get Heatmap Hour and Month by Bus Count",
 )
-def get_heatmap_hour_and_month(
+def aggregation_hour_and_month(
     context: AssetExecutionContext,
     dask: DaskResource,
     df: dd.DataFrame,
@@ -155,6 +155,7 @@ def get_heatmap_hour_and_month(
                     "Heatmap": heatmap_hour_month,
                 }
             )
+            return agg.reset_index()
     except Exception as e:
         raise e
 
@@ -167,7 +168,7 @@ def get_heatmap_hour_and_month(
     kinds={"Dask"},
     description="Get Heatmap Hour and Week by Bus Count",
 )
-def get_heatmap_hour_and_week(
+def aggregation_hour_and_week(
     context: AssetExecutionContext,
     dask: DaskResource,
     df: dd.DataFrame,
@@ -210,6 +211,7 @@ def get_heatmap_hour_and_week(
                     "Heatmap": heatmap_hour_week,
                 }
             )
+            return agg.reset_index()
     except Exception as e:
         raise e
 

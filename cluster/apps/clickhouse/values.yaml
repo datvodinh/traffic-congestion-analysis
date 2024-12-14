@@ -233,7 +233,7 @@ externalAccess:
       metrics: 8001
 
 ingress:
-  enabled: true
+  enabled: false
   pathType: ImplementationSpecific
   apiVersion: ""
   hostname: clickhouse.local
@@ -251,7 +251,7 @@ persistence:
   annotations: {}
   accessModes:
     - ReadWriteOnce
-  size: 8Gi
+  size: 32Gi
   selector: {}
   dataSource: {}
 

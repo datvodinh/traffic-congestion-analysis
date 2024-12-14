@@ -8,30 +8,6 @@ downloadDashboardsImage:
   sha: ""
   pullPolicy: IfNotPresent
 
-downloadDashboards:
-  env: {}
-  envFromSecret: ""
-  resources: {}
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - ALL
-    seccompProfile:
-      type: RuntimeDefault
-  envValueFrom: {}
-  #  ENV_NAME:
-  #    configMapKeyRef:
-  #      name: configmap-name
-  #      key: value_key
-
-# podAnnotations: {}
-
-# configMapAnnotations: {}
-# argocd.argoproj.io/sync-options: Replace=true
-
-# podLabels: {}
-
 podPortName: grafana
 gossipPortName: gossip
 
@@ -97,12 +73,6 @@ persistence:
   # annotations: {}
   finalizers:
     - kubernetes.io/pvc-protection
-  # selectorLabels: {}
-
-  # subPath: ""
-
-  # existingClaim:
-
   extraPvcLabels: {}
   disableWarning: false
 
@@ -157,7 +127,9 @@ admin:
 
 enableServiceLinks: true
 
-##
+plugins:
+  - grafana-clickhouse-datasource
+
 datasources:
   datasources.yaml:
     apiVersion: 1
@@ -171,10 +143,11 @@ datasources:
       - name: ClickHouse
         type: grafana-clickhouse-datasource
         jsonData:
-          defaultDatabase: database
-          port: 9000
+          defaultDatabase: default
+          port: 8123
           host: clickhouse.default.svc.cluster.local
           username: default
+          protocol: http
           tlsSkipVerify: true
         secureJsonData:
           password: 123456

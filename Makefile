@@ -11,6 +11,7 @@ add-repo: ## Add Helm Repo for all Service
 	@helm repo add dagster https://dagster-io.github.io/helm
 	@helm repo add dask https://helm.dask.org/
 	@helm repo add bitnami https://charts.bitnami.com/bitnami
+	@helm repo add superset http://apache.github.io/superset/
 	@helm repo update
 
 delete-repo: ## Remove Helm Repo
@@ -22,8 +23,8 @@ delete-repo: ## Remove Helm Repo
 	@helm repo remove dagster
 	@echo "🗑️ Remove Helm Repo for dask"
 	@helm repo remove dask
-	# @echo "🗑️ Remove Helm Repo for ClickHouse"
-	# @helm repo remove clickhouse
+	@echo "🗑️ Remove Helm Repo for ClickHouse"
+	@helm repo remove clickhouse
 
 up: ## Apply all Service to Kubernetes
 	@echo "🚀 Upgrade Helm Repo for Prometheus"
@@ -40,6 +41,8 @@ up: ## Apply all Service to Kubernetes
 	@helm upgrade --install clickhouse bitnami/clickhouse -f cluster/apps/clickhouse/values.yaml
 	@echo "🚀 Add Kafka"
 	@helm upgrade --install kafka bitnami/kafka -f cluster/apps/kafka/values.yaml
+	@echo "🚀 Add Superset"
+	@helm upgrade --install superset superset/superset -f cluster/apps/superset/values.yaml
 
 down: ## Delete all Service from Kubernetes
 	@echo "🗑️ Delete Helm Repo for Prometheus"
@@ -54,6 +57,8 @@ down: ## Delete all Service from Kubernetes
 	@helm delete clickhouse
 	@echo "🗑️ Delete Helm Repo for Kafka"
 	@helm delete kafka
+	@echo "🗑️ Delete Helm Repo for Superset"
+	@helm delete superset
 
 expose:
 	@echo "🌐 Expose Service"
