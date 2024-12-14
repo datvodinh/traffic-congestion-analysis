@@ -281,7 +281,7 @@ metrics:
     enabled: true
 
 zookeeper:
-  enabled: false
+  enabled: true
 
 networkPolicy:
   enabled: true

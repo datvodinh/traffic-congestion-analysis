@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import dask.dataframe as dd
 import geopandas as gpd
+import dask_geopandas
 from shapely.geometry import LineString
 from dagster import asset
 from io import BytesIO
@@ -213,6 +214,38 @@ def get_heatmap_hour_and_week(
         raise e
 
 
+def speed_category(speed):
+    """Categorize speed into color"""
+    conditions = [
+        (speed > 18),
+        (speed >= 15) & (speed <= 18),
+    ]
+    choices = ["Green", "Orange"]
+    return np.select(conditions, choices, default="Red")
+
+
+def create_geometry(df):
+    """Create geometry column"""
+    df["geometry"] = [
+        LineString(
+            [
+                (row["start_longitude"], row["start_latitude"]),
+                (row["end_longitude"], row["end_latitude"]),
+            ]
+        )
+        for _, row in df.iterrows()
+    ]
+    df = df.drop(
+        columns=[
+            "start_longitude",
+            "start_latitude",
+            "end_longitude",
+            "end_latitude",
+        ]
+    )
+    return df
+
+
 @asset(
     ins={
         "df": AssetIn("drop_invalid_rows"),
@@ -228,28 +261,6 @@ def get_congestion_data(
 ):
     try:
         with dask.get_client():
-            # Function to categorize speed into color
-            def speed_category(speed):
-                conditions = [
-                    (speed > 18),
-                    (speed >= 15) & (speed <= 18),
-                ]
-                choices = ["Green", "Orange"]
-                return np.select(conditions, choices, default="Red")
-
-            # Create geometry column efficiently
-            def create_geometry(df):
-                df["geometry"] = [
-                    LineString(
-                        [
-                            (row["start_longitude"], row["start_latitude"]),
-                            (row["end_longitude"], row["end_latitude"]),
-                        ]
-                    )
-                    for _, row in df.iterrows()
-                ]
-                return df
-
             agg_method = {
                 "speed": "mean",
                 "start_latitude": "first",
@@ -274,24 +285,26 @@ def get_congestion_data(
             result["speed_color"] = result["speed"].map_partitions(
                 speed_category, meta=("speed", "object")
             )
-
+            drop_columns = [
+                "start_latitude",
+                "start_longitude",
+                "end_latitude",
+                "end_longitude",
+            ]
             # Apply geometry creation
             geometry_meta = {
-                col: "float64" for col in result.columns if col != "geometry"
+                col: "float64"
+                for col in result.columns
+                if col != "geometry" and col not in drop_columns
             }
-            geometry_meta["geometry"] = "object"
+            geometry_meta["geometry"] = "str"
             result = result.map_partitions(
                 create_geometry,
                 meta=geometry_meta,
             )
-            result = result.compute()
 
-            # Convert to GeoPandas dataframe
-            gdf = gpd.GeoDataFrame(
-                result,
-                geometry="geometry",
-                crs="EPSG:4326",
-            )
+            gdf: gpd.GeoDataFrame = dask_geopandas.from_dask_dataframe(result)
+            gdf = gdf.compute()
 
             gdf["speed"].plot.hist(alpha=0.4, bins=100)
             plt.xlabel("Speed (MPH)")
@@ -319,7 +332,6 @@ def get_congestion_data(
                     "Chicaco Segments": chicago_segments,
                 },
             )
-
             return gdf
 
     except Exception as e:

@@ -161,7 +161,7 @@ telemetry:
   enabled: false
 
 retention:
-  enabled: false
+  enabled: true
   schedule:
     purgeAfterDays: -1
   sensor:

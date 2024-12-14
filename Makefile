@@ -36,10 +36,10 @@ up: ## Apply all Service to Kubernetes
 	@kubectl apply -f cluster/apps/dagster/configmap.yaml
 	@echo "🚀 Upgrade Helm Repo for Dask"
 	@helm upgrade --install dask dask/dask -f cluster/apps/dask/values.yaml
-	# @echo "🚀 Add ClickHouse"
-	# @helm upgrade --install clickhouse bitnami/clickhouse -f cluster/apps/clickhouse/values.yaml
-	# @echo "🚀 Add Kafka"
-	# @helm upgrade --install kafka bitnami/kafka -f cluster/apps/kafka/values.yaml
+	@echo "🚀 Add ClickHouse"
+	@helm upgrade --install clickhouse bitnami/clickhouse -f cluster/apps/clickhouse/values.yaml
+	@echo "🚀 Add Kafka"
+	@helm upgrade --install kafka bitnami/kafka -f cluster/apps/kafka/values.yaml
 
 down: ## Delete all Service from Kubernetes
 	@echo "🗑️ Delete Helm Repo for Prometheus"
@@ -52,13 +52,12 @@ down: ## Delete all Service from Kubernetes
 	@helm delete dask
 	@echo "🗑️ Delete Helm Repo for ClickHouse"
 	@helm delete clickhouse
-	# @echo "🗑️ Delete Helm Repo for Kafka"
-	# @helm delete kafka
+	@echo "🗑️ Delete Helm Repo for Kafka"
+	@helm delete kafka
 
 expose:
 	@echo "🌐 Expose Service"
-	@minikube service dagster-webserver dask-scheduler clickhouse
-	# grafana prometheus-server 
+	@minikube service dagster-webserver dask-scheduler grafana
 
 cleanup:
 	@kubectl delete pods --field-selector=status.phase=Succeeded

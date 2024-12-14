@@ -1,10 +1,10 @@
 from dagster import load_assets_from_modules
 
-from . import processing, visualize
+from . import processing, serving
 from .processing import TrafficInputConfig
 
 all_assets = load_assets_from_modules(
-    modules=[processing, visualize],
+    modules=[processing, serving],
 )
 
 __all__ = [

@@ -26,7 +26,7 @@ serverFiles:
       - job_name: "dask-scheduler"
         scrape_interval: 5s
         static_configs:
-          - targets: ["dashboard.dask:8787"]
+          - targets: ["dask-scheduler.default.svc.cluster.local:80"]
 
       - job_name: "kubernetes-apiservers"
 

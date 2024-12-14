@@ -38,7 +38,7 @@ deptry = "^0.20.0"
 ruff = "^0.7.2"
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["dagster-webserver", "pandas", "s3fs", "bokeh", "pydantic", "dask-geopandas", "dagster-postgres", "geojson", "dagster-prometheus", "prometheus-client"]
+DEP002 = ["dagster-webserver", "pandas", "s3fs", "bokeh", "pydantic", "dagster-postgres", "geojson", "dagster-prometheus", "prometheus-client"]
 
 [build-system]
 requires = ["poetry-core"]
