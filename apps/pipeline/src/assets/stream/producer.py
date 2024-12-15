@@ -31,9 +31,9 @@ class StreamTrafficProducer:
         self,
         config: ProducerConfig,
     ):
-        print(f"{os.getenv('KAFKA_HOST')}:{os.getenv('KAFKA_PORT')}")
+        print(os.getenv("KAFKA_URL"))
         self.producer = KafkaProducer(
-            bootstrap_servers=f"{os.getenv('KAFKA_HOST')}:{os.getenv('KAFKA_PORT')}",
+            bootstrap_servers=os.getenv("KAFKA_URL"),
             value_serializer=lambda v: json.dumps(v).encode("utf-8"),
             key_serializer=lambda k: k.encode("utf-8")
             if k

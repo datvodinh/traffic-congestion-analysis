@@ -17,7 +17,7 @@ class StreamTrafficConsumer:
     ):
         self.consumer = KafkaConsumer(
             "traffic",
-            bootstrap_servers=f"{os.getenv('KAFKA_HOST')}:{os.getenv('KAFKA_PORT')}",
+            bootstrap_servers=os.getenv("KAFKA_URL"),
             value_deserializer=lambda v: json.loads(v.decode("utf-8")),
             key_deserializer=lambda k: k.decode("utf-8") if k else None,
             auto_offset_reset="earliest",
