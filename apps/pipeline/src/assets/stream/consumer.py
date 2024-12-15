@@ -22,6 +22,10 @@ class StreamTrafficConsumer:
             key_deserializer=lambda k: k.decode("utf-8") if k else None,
             auto_offset_reset="earliest",
             group_id="traffic-consumer-group",
+            security_protocol="SASL_PLAINTEXT",  # Match the broker's protocol
+            sasl_mechanism="PLAIN",  # Match the mechanism set in Helm chart
+            sasl_plain_username="user1",  # Matches the SASL client user in your Helm chart
+            sasl_plain_password="user1_password",
         )
 
         self.clickhouse_client = clickhouse_client
