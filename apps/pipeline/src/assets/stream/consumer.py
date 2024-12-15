@@ -107,7 +107,7 @@ class StreamTrafficConsumer:
             timestamp = message.key
             data = message.value
             context.log.info(
-                f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Received: {data} with timestamp: {timestamp}",
+                f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Received: segment {data['segment_id']} with timestamp: {timestamp}",
             )
 
             # Process the data
@@ -121,7 +121,7 @@ class StreamTrafficConsumer:
                     )
 
                     context.log.info(
-                        f"Inserted {data} to ClickHouse table traffic_data_stream"
+                        f"Inserted segment {data['segment_id']} to ClickHouse table traffic_data_stream"
                     )
 
             self.consumer.commit()
