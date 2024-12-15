@@ -13,7 +13,7 @@ load_dotenv()
 
 class ProducerConfig(Config):
     speed: int = Field(
-        default=1,
+        default=5,
         description="Speed of the producer",
     )
     topic: str = Field(
@@ -82,7 +82,6 @@ class StreamTrafficProducer:
                 context.log.info(
                     f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Sended for segment_id: {row['segment_id']}"
                 )
-
-            time.sleep(1 / self.config.speed)
+                time.sleep(1 / self.config.speed)
 
         context.log.info("Finished")
