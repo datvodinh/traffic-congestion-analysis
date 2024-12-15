@@ -96,13 +96,15 @@ class StreamTrafficConsumer:
 
     def run(self, context: AssetExecutionContext):
         context.log.info("Starting Kafka Consumer...")
-        context.log.info("Current kakfa topics:", list(self.consumer.topics()))
+        context.log.info(
+            f"Current kakfa topics: {json.dumps(list(self.consumer.topics()))}",
+        )
 
         for message in self.consumer:
             timestamp = message.key
             data = message.value
             context.log.info(
-                f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Received: {data} with timestamp: {timestamp}"
+                f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Received: {data} with timestamp: {timestamp}",
             )
 
             # Process the data
