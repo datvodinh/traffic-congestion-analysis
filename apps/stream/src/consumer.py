@@ -22,6 +22,7 @@ class ClickHouseResource:
         CREATE TABLE IF NOT EXISTS {os.getenv("CLICKHOUSE_TABLE")}
         (
             segment_id       UInt32,  -- Assuming segment IDs are integers
+            time             DateTime,
             speed            Float32, -- Speed is a floating-point number
             congestion_level String,
             from_street      String,  -- From-street name as a string
@@ -82,6 +83,8 @@ class StreamTrafficConsumer:
         ).get_client()
 
     def data_transform(self, data: dict) -> gpd.GeoDataFrame:
+        data["time"] = datetime.strptime(data["time"], "%Y-%m-%dT%H:%M:%S.%f")
+
         transformed_data = dict((k, [v]) for k, v in data.items())
 
         df = gpd.GeoDataFrame(transformed_data)
@@ -103,6 +106,7 @@ class StreamTrafficConsumer:
             :,
             [
                 "segment_id",
+                "time",
                 "speed",
                 "congestion_level",
                 "from_street",
@@ -135,6 +139,7 @@ class StreamTrafficConsumer:
             # Process the data
             if data:
                 df = self.data_transform(data)
+                print(f"==>> df: {df}")
 
                 # Insert the data to ClickHouse
                 self.clickhouse_client.insert(
