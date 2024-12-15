@@ -116,10 +116,12 @@ class StreamTrafficConsumer:
                 if df is not None:
                     # Insert the data to ClickHouse
                     self.clickhouse_client.insert(
-                        table=os.getenv("CLICKHOUSE_TABLE"),
+                        table="traffic_data_stream",
                         data=df,
                     )
 
-                    context.log.info(f"Inserted {data} to ClickHouse")
+                    context.log.info(
+                        f"Inserted {data} to ClickHouse table traffic_data_stream"
+                    )
 
             self.consumer.commit()
