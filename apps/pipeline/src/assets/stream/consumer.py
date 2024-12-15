@@ -59,12 +59,11 @@ class StreamTrafficConsumer:
         self.clickhouse_client.command(query)
 
     def data_transform(self, data: dict) -> gpd.GeoDataFrame:
+        if data["speed"] == -1:
+            return None
         transformed_data = dict((k, [v]) for k, v in data.items())
 
         df = gpd.GeoDataFrame(transformed_data)
-
-        # Remove rows where speed is -1
-        df = df[df["speed"] != -1]
 
         # New column congestion_level
         df["congestion_level"] = df["speed"].apply(
@@ -114,13 +113,13 @@ class StreamTrafficConsumer:
             # Process the data
             if data:
                 df = self.data_transform(data)
+                if df is not None:
+                    # Insert the data to ClickHouse
+                    self.clickhouse_client.insert(
+                        table=os.getenv("CLICKHOUSE_TABLE"),
+                        data=df,
+                    )
 
-                # Insert the data to ClickHouse
-                self.clickhouse_client.insert(
-                    table=os.getenv("CLICKHOUSE_TABLE"),
-                    data=df,
-                )
-
-                context.log.info(f"Inserted {data} to ClickHouse")
+                    context.log.info(f"Inserted {data} to ClickHouse")
 
             self.consumer.commit()
