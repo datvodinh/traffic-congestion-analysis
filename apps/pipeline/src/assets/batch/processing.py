@@ -16,8 +16,8 @@ from dagster import (
     AssetIn,
 )
 from pydantic import Field
-from ..resources import DaskResource
-from ..sensors import traffic_partitions_def
+from ...resources import DaskResource
+from ...sensors import traffic_partitions_def
 
 
 class TrafficInputConfig(Config):

@@ -6,8 +6,8 @@ from dagster import (
     AssetExecutionContext,
     MetadataValue,
 )
-from ..sensors import traffic_partitions_def
-from ..resources import ClickHouseResource
+from ...sensors import traffic_partitions_def
+from ...resources import ClickHouseResource
 
 
 @asset(

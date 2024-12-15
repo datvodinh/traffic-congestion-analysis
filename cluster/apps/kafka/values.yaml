@@ -6,6 +6,14 @@ image:
   tag: 3.9.0-debian-12-r1
   pullPolicy: IfNotPresent
 
+topics:
+  - name: traffic
+    partitions: 1
+    replicationFactor: 1
+    config:
+      max.message.bytes: 64000
+      flush.messages: 1
+
 listeners:
   client:
     containerPort: 9092
@@ -54,7 +62,7 @@ sasl:
   client:
     users:
       - user1
-    passwords: ""
+    passwords: "user1_password"
 
   zookeeper:
     user: ""
