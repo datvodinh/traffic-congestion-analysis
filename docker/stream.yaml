@@ -22,7 +22,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1  # Broker ID, distinct value for each broker
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://0.0.0.0:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Not exceeding the number of brokers
@@ -38,3 +38,17 @@ services:
     restart: unless-stopped
     depends_on:
       - kafka
+
+  clickhouse:
+    container_name: clickhouse-datawarehouse
+    image: clickhouse/clickhouse-server
+    ports:
+      - 8123:8123 # HTTP port
+      - 9999:9000 # Native port
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+    restart: unless-stopped
+  
+volumes:
+  clickhouse-data:
+    driver: local

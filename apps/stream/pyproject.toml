@@ -12,6 +12,10 @@ packages = [
 python = "^3.11"
 kafka-python = "^2.0.2"
 polars = "^1.17.1"
+clickhouse-connect = "^0.8.10"
+geopandas = "^1.0.1"
+python-dotenv = "^1.0.1"
+pydantic = "^2.10.3"
 
 
 [build-system]
