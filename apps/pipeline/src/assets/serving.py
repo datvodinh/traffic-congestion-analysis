@@ -1,13 +1,14 @@
 import pandas as pd
-from geopandas import GeoDataFrame
 from dagster import (
-    asset,
-    AssetIn,
     AssetExecutionContext,
+    AssetIn,
     MetadataValue,
+    asset,
 )
-from ..sensors import traffic_partitions_def
+from geopandas import GeoDataFrame
+
 from ..resources import ClickHouseResource
+from ..sensors import traffic_partitions_def
 
 
 @asset(

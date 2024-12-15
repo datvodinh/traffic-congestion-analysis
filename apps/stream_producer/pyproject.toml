@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "traffic-stream"
+version = "0.1.0"
+description = ""
+authors = ["2uanDM <hokage321xxx@gmail.com>"]
+readme = "README.md"
+packages = [
+  {include = "src"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+kafka-python = "^2.0.2"
+polars = "^1.17.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

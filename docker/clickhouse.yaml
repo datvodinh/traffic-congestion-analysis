@@ -1,0 +1,17 @@
+version: ‘3.9'
+
+services:
+  clickhouse:
+    container_name: clickhouse-datawarehouse
+    image: clickhouse/clickhouse-server
+    ports:
+      - 8123:8123 # HTTP port
+      - 9999:9000 # Native port
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+    restart: unless-stopped
+    
+  
+volumes:
+  clickhouse-data:
+    driver: local
