@@ -1,9 +1,10 @@
 import json
 import os
-import geopandas as gpd
-from dagster import AssetExecutionContext
 from datetime import datetime
+
+import geopandas as gpd
 from clickhouse_connect.driver.client import Client
+from dagster import AssetExecutionContext
 from dotenv import load_dotenv
 from kafka import KafkaConsumer
 
@@ -30,14 +31,13 @@ class StreamTrafficConsumer:
 
         self.clickhouse_client = clickhouse_client
 
-        self.clickhouse_client.command(
-            "DROP TABLE IF EXISTS traffic_data_stream"
-        )
+        self.clickhouse_client.command("DROP TABLE IF EXISTS traffic_data_stream")
 
         query = """
         CREATE TABLE IF NOT EXISTS traffic_data_stream
         (
             segment_id       UInt32,  -- Assuming segment IDs are integers
+            time             DateTime, -- Time is a date-time object
             speed            Float32, -- Speed is a floating-point number
             congestion_level String,
             from_street      String,  -- From-street name as a string
@@ -61,6 +61,10 @@ class StreamTrafficConsumer:
     def data_transform(self, data: dict) -> gpd.GeoDataFrame:
         if data["speed"] == -1:
             return None
+
+        # 2024-12-14T06:50:27.000 -> datetime
+        data["time"] = datetime.strptime(data["time"], "%Y-%m-%dT%H:%M:%S.%f")
+
         transformed_data = dict((k, [v]) for k, v in data.items())
 
         df = gpd.GeoDataFrame(transformed_data)
@@ -79,6 +83,7 @@ class StreamTrafficConsumer:
             :,
             [
                 "segment_id",
+                "time",
                 "speed",
                 "congestion_level",
                 "from_street",
