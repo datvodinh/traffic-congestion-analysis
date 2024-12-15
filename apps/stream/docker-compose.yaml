@@ -1,0 +1,68 @@
+version: ‘3.9'
+
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2181:2181
+    restart: unless-stopped
+
+  broker:
+    container_name: broker
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092 # Internal Kafka port
+      - 29092:29092 # External Kafka port
+    environment:
+      KAFKA_BROKER_ID: 1 # Broker ID, distinct value for each broker
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Not exceeding the number of brokers
+    restart: unless-stopped
+
+  kafdrop:
+    image: "obsidiandynamics/kafdrop"
+    container_name: kafdrop
+    ports:
+      - 9010:9000
+    environment:
+      KAFKA_BROKER_CONNECT: "kafka:9092"
+    restart: unless-stopped
+    depends_on:
+      - broker
+
+  clickhouse:
+    container_name: clickhouse-datawarehouse
+    image: clickhouse/clickhouse-server
+    ports:
+      - 8123:8123 # HTTP port
+      - 9999:9000 # Native port
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+    restart: unless-stopped
+
+  consumer:
+    container_name: consumer
+    build: .
+    depends_on:
+      - broker
+    environment:
+      KAFKA_HOST: host.docker.internal
+      KAFKA_PORT: ${KAFKA_PORT}
+      SIM_SPEED: ${SIM_SPEED}
+      CLICKHOUSE_HOST: host.docker.internal
+      CLICKHOUSE_PORT: ${CLICKHOUSE_PORT}
+      CLICKHOUSE_TABLE: ${CLICKHOUSE_TABLE}
+    restart: unless-stopped
+
+volumes:
+  clickhouse-data:
+    driver: local

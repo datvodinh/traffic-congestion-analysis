@@ -50,3 +50,24 @@ jobs:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.actor }}
           ORGANIZATION_NAME: datvodinh
+  
+  docker-build:
+    name: Stream Image
+    environment: dev
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout Actions Repository
+        uses: actions/checkout@v4
+
+      - name: Build Stream
+        uses: ./.github/actions/package-container
+        with:
+          FOLDER_PATH: ./apps/stream
+          IMAGE_NAME: traffic-analysis-stream
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ github.actor }}
+          ORGANIZATION_NAME: datvodinh

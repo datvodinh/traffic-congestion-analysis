@@ -21,10 +21,10 @@ worker:
   resources:
     limits:
       cpu: 3
-      memory: 9G
+      memory: 3G
     requests:
       cpu: 3
-      memory: 9G
+      memory: 3G
 
 jupyter:
   name: jupyter
