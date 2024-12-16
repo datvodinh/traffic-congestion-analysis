@@ -52,7 +52,8 @@ class StreamTrafficConsumer:
             end_latitude     Float32,
             end_longitude    Float32,
         )
-        ENGINE = MergeTree()
+        ENGINE = ReplacingMergeTree
+        PRIMARY KEY segment_id
         ORDER BY segment_id;
         """
 
