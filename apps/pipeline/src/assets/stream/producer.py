@@ -13,7 +13,7 @@ load_dotenv()
 
 class ProducerConfig(Config):
     speed: int = Field(
-        default=5,
+        default=100,
         description="Speed of the producer",
     )
     topic: str = Field(
@@ -21,7 +21,7 @@ class ProducerConfig(Config):
         description="Kafka topic",
     )
     csv_path: str = Field(
-        default="s3://traffic/chicago_stream/sxs8-h27x.csv",
+        default="s3://traffic/chicago_stream/sample.csv",
         description="Path to the csv file, from s3",
     )
 
