@@ -7,7 +7,6 @@ scheduler:
     pullPolicy: Always
   replicas: 1
 
-
 worker:
   name: worker
   image:
@@ -15,7 +14,7 @@ worker:
     tag: latest
     pullPolicy: Always
 
-  replicas: 4
+  replicas: 3
   strategy:
     type: RollingUpdate
   resources:
